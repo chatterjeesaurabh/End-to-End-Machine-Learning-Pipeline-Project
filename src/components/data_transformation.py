@@ -40,7 +40,7 @@ class DataTransformation:
             ## Numerical Pipeline
             num_pipeline = Pipeline(
                 steps=[
-                    ('imputer', SimpleImputer(strategy='median')),
+                    ('imputer', SimpleImputer(strategy='median')), 
                     ('scaler', StandardScaler())
                 ]
             )
@@ -61,11 +61,9 @@ class DataTransformation:
             
             return preprocessor
 
-
         except Exception as e:
-            logging.info("Exception occured in the get_data_transformation()")
-
-            raise customException(e,sys)
+            logging.info("Exception occured in the get_data_transformation")
+            raise customException(e, sys)
             
     
     def initialize_data_transformation(self, train_path, test_path):
@@ -110,7 +108,6 @@ class DataTransformation:
             )
             
         except Exception as e:
-            logging.info("Exception occured in the initialize_data_transformation()")
-
+            logging.info("Exception occured in the initialize_data_transformation")
             raise customException(e, sys)
             
