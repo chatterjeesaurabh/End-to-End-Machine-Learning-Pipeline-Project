@@ -9,26 +9,27 @@ from airflow.operators.python import PythonOperator
 with DAG(
     'batch_prediction',
     default_args={'retries': 2},
-    # [END default_args]
     description='gemstone batch prediction',
     schedule_interval="@weekly", # here you can test based on hour or mints but make sure here you container is up and running
     start_date=pendulum.datetime(2023,4, 11, tz="UTC"),
     catchup=False,
-    tags=['example'],
+    tags=['machine learning', 'batch prediction'],
 ) as dag:
-    def download_files(**kwargs):
-        bucket_name = os.getenv("BUCKET_NAME")# download the file from the repo
+    
+    def download_files(**kwargs):       # Download files from the remote directory
+        bucket_name = os.getenv("BUCKET_NAME")  # download the file from the repo
         input_dir = "/app/input_files"
         #creating directory
         os.makedirs(input_dir,exist_ok=True)
         #os.system(f"aws s3 sync s3://{bucket_name}/inbox {config.inbox_dir}")
 
-    def batch_prediction(**kwargs):
+    def batch_prediction(**kwargs):     # perform Batch Prediction
+        from src.pipeline.batch_prediction import BatchPredictionConfig, SensorBatchPrediction
         config = BatchPredictionConfig()
         sensor_batch_prediction = SensorBatchPrediction(batch_config=config)
         sensor_batch_prediction.start_prediction()
        
-    def upload_files(**kwargs):
+    def upload_files(**kwargs):         # then upload the predicted data files
         #bucket_name = os.getenv("BUCKET_NAME")
         #os.system(f"aws s3 sync {config.archive_dir} s3://{bucket_name}/archive")
         #os.system(f"aws s3 sync {config.outbox_dir} s3://{bucket_name}/outbox")
@@ -54,4 +55,4 @@ with DAG(
 
     download_input_files >> generate_prediction_files >> upload_prediction_files
     
-    """
+"""   

@@ -9,10 +9,10 @@ from src.pipeline.training_pipeline import TrainingPipeline
 training_pipeline = TrainingPipeline()
 
 with DAG(
-    "gemstone_training_pipeline",                   # DAG Name
+    dag_id="gemstone_training_pipeline",                   # DAG Name
     default_args = {"retries": 2},                  # 
     description = "it is my training pipeline",
-    schedule = "@weekly",       # here you can test based on hour or mints but make sure here you container is up and running
+    schedule = "@daily",       # here you can test based on hour or mints but make sure here you container is up and running
     start_date = pendulum.datetime(2024, 8, 15, tz="UTC"),
     catchup = False,
     tags = ["machine_learning ", "regression", "mlops"],
@@ -51,10 +51,10 @@ with DAG(
         
 
     # defining AirFlow OPERATORS for each Task:
-    
+
     data_ingestion_task = PythonOperator(
         task_id = "data_ingestion",
-        python_callable = data_ingestion,
+        python_callable = data_ingestion
     )
     data_ingestion_task.doc_md = dedent(
         """\
@@ -65,7 +65,7 @@ with DAG(
 
     data_transform_task = PythonOperator(
         task_id = "data_transformation",
-        python_callable = data_transformations,
+        python_callable = data_transformations
     )
     data_transform_task.doc_md = dedent(
         """\
@@ -76,7 +76,7 @@ with DAG(
 
     model_trainer_task = PythonOperator(
         task_id="model_trainer",
-        python_callable = model_trainer,
+        python_callable = model_trainer
     )
     model_trainer_task.doc_md = dedent(
         """\
