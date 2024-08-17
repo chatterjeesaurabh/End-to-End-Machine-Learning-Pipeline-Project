@@ -5,8 +5,21 @@ import numpy as np
 import pandas as pd
 from src.logger.logging import logging
 from src.exception.exception import customException
+import yaml
+import json
 
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
+
+
+def read_yaml(yaml_path):
+    try:
+        with open(yaml_path) as yaml_file:
+            content = yaml.safe_load(yaml_file)
+            logging.info(f"yaml file: {yaml_path} loaded sucessfully")
+            return content
+    
+    except Exception as e:
+        raise customException(e, sys)
 
 
 def save_object(file_path, obj):
@@ -53,5 +66,12 @@ def load_object(file_path):
     except Exception as e:
         logging.info('Exception Occured in load_object function utils')
         raise customException(e,sys)
+
+
+def save_json(path, data: dict):
+    with open(path, "w") as f:
+        json.dump(data, f, indent=4)
+    
+    logging.info(f"json file saved at {path}")
 
     

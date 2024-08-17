@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 from dataclasses import dataclass
 from pathlib import Path
+from src.utils.utils import read_yaml
 
 from sklearn.impute import SimpleImputer                            
 from sklearn.preprocessing import StandardScaler, OrdinalEncoder    
@@ -17,7 +18,12 @@ from sklearn.compose import ColumnTransformer
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path = os.path.join('artifacts', 'preprocessor.pkl')
+    config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
+    artifacts_folder = config['artifacts_root']      # = '/artifacts'
+
+    preprocessor_obj_file_path = os.path.join(artifacts_folder, "preprocessor.pkl")
+    transformed_train_path = os.path.join(artifacts_folder, "transformed_train.csv")
+    transformed_test_path = os.path.join(artifacts_folder, "transformed_test.csv")
 
 
 class DataTransformation:
@@ -72,8 +78,8 @@ class DataTransformation:
             test_df = pd.read_csv(test_path)
             
             logging.info("read train and test data complete")
-            logging.info(f'Train Dataframe Head : \n{train_df.head().to_string()}')
-            logging.info(f'Test Dataframe Head : \n{test_df.head().to_string()}')
+            logging.info(f'Train Dataset Shape : {train_df.shape}')
+            logging.info(f'Test Dataset Shape : {test_df.shape}')
             
             preprocessing_obj = self.get_data_transformation()
             
@@ -88,23 +94,34 @@ class DataTransformation:
             
             logging.info("Applying preprocessing object on train and test datasets.")
 
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
+            input_feature_train_arr = pd.DataFrame(preprocessing_obj.fit_transform(input_feature_train_df), columns=preprocessing_obj.get_feature_names_out())
             
-            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
+            input_feature_test_arr = pd.DataFrame(preprocessing_obj.transform(input_feature_test_df), columns=preprocessing_obj.get_feature_names_out())
             
-            train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
-            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
+            train_arr = np.c_[input_feature_train_arr, np.array(target_feature_train_df)]   #
+            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]      #
 
-            save_object(
+
+            transformed_train = pd.concat([input_feature_train_arr, target_feature_train_df], axis=1)
+            transformed_test = pd.concat([input_feature_test_arr, target_feature_test_df], axis=1)
+
+            # save transformed data:
+            transformed_train.to_csv(self.data_transformation_config.transformed_train_path, index=False)
+            transformed_test.to_csv(self.data_transformation_config.transformed_test_path, index=False)
+            logging.info(f"transformed train-test data saved to /{self.data_transformation_config.artifacts_folder} folder")
+
+            save_object(        # save preprocessor as object: pkl file
                 file_path = self.data_transformation_config.preprocessor_obj_file_path,
                 obj = preprocessing_obj
             )
             
-            logging.info("preprocessing pickle file saved")
+            logging.info(f"preprocessing pickle file saved to /{self.data_transformation_config.artifacts_folder} folder")
             
+
+
             return (
-                train_arr,
-                test_arr
+                train_arr,  #
+                test_arr    #
             )
             
         except Exception as e:

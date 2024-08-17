@@ -2,7 +2,7 @@ import os
 import sys
 from src.logger.logging import logging
 from src.exception.exception import customException
-from src.utils.utils import evaluate_model, save_object
+from src.utils.utils import evaluate_model, save_object, read_yaml
 
 import pandas as pd
 import numpy as np
@@ -18,7 +18,10 @@ from sklearn.linear_model import LinearRegression, Lasso, Ridge
 
 @dataclass 
 class ModelTrainerConfig:
-    trained_model_file_path = os.path.join('artifacts', 'model.pkl')
+    config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
+    artifacts_folder = config['artifacts_root']      # = '/artifacts'
+
+    trained_model_file_path = os.path.join(artifacts_folder, 'model.pkl')
     
     
 class ModelTrainer:
@@ -62,7 +65,7 @@ class ModelTrainer:
             print('\n===================================================================\n')
             logging.info(f'Best Model Found , Model Name : {best_model_name} , R2 Score : {best_model_score}')
 
-            save_object(
+            save_object(        # save model object as .pkl
                  file_path = self.model_trainer_config.trained_model_file_path,
                  obj = best_model
             )

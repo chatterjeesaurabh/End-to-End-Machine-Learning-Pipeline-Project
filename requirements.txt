@@ -8,3 +8,4 @@ dvc
 ipykernel
 xgboost
 apache-airflow==2.9.3
+tqdm
