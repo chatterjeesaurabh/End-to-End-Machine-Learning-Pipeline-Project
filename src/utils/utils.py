@@ -21,6 +21,15 @@ def read_yaml(yaml_path):
     except Exception as e:
         raise customException(e, sys)
 
+def save_yaml(yaml_path, obj):
+    try:
+        with open(yaml_path, "w") as yaml_file:
+            yaml.dump(obj, yaml_file)
+            logging.info(f"yaml file: {yaml_path} saved sucessfully")
+    
+    except Exception as e:
+        raise customException(e, sys)
+
 
 def save_object(file_path, obj):
     try:
@@ -35,15 +44,20 @@ def save_object(file_path, obj):
         raise customException(e, sys)
     
 
-def evaluate_model(X_train, y_train, X_test, y_test, models):
+def evaluate_model(X_train, y_train, X_test, y_test, models, hyperparams:dict):
     try:
         report = {}
         for i in range(len(models)):
+            model_name:str = list(models.keys())[i]
             model = list(models.values())[i]
-            # Train model
+
+            if model_name in hyperparams:                       # if this model's hyperparameters are defined in 'hyperparams', then set them
+                model.set_params(**hyperparams[model_name])
+                
+            # Train model:
             model.fit(X_train, y_train)
 
-            # Predict Testing data
+            # Predict Testing data:
             y_test_pred = model.predict(X_test)
 
             # Get R2 scores for train and test data

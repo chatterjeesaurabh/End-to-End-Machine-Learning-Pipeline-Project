@@ -15,8 +15,8 @@ def get_requirements(file_path:str)->List[str]:
     return requirements
 
 setup(
-    name='DimondPricePrediction',
-    version='1.0.0',
+    name='DiamondPricePrediction',
+    version='2.0.0',
     author='Saurabh Chatterjee',
     author_email='saurabhchatterjee38@gmail.com',
     install_requires=[get_requirements('requirements_dev.txt')],

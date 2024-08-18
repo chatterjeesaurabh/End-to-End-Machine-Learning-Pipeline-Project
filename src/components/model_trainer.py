@@ -2,7 +2,7 @@ import os
 import sys
 from src.logger.logging import logging
 from src.exception.exception import customException
-from src.utils.utils import evaluate_model, save_object, read_yaml
+from src.utils.utils import evaluate_model, save_object, read_yaml, save_yaml
 
 import pandas as pd
 import numpy as np
@@ -16,9 +16,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression, Lasso, Ridge
 
 
+config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
+
 @dataclass 
 class ModelTrainerConfig:
-    config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
     artifacts_folder = config['artifacts_root']      # = '/artifacts'
 
     trained_model_file_path = os.path.join(artifacts_folder, 'model.pkl')
@@ -30,6 +31,7 @@ class ModelTrainer:
     
     def initate_model_training(self, train_array, test_array):
         try:
+            logging.info('Initiating Model Training')
             logging.info('Splitting Dependent and Independent variables from train and test data')
             X_train, y_train, X_test, y_test = (
                 train_array[:,:-1],
@@ -45,9 +47,11 @@ class ModelTrainer:
                 'DecisionTreeRegressor': DecisionTreeRegressor(),
                 'Randomforest': RandomForestRegressor(),
                 'xgboost': XGBRegressor()
-        }
+            }
+
+            hyperparams:dict = read_yaml("params.yaml")     ## Load Hyperparameters: defined in 'params.yaml' file
             
-            model_report:dict = evaluate_model(X_train, y_train, X_test, y_test, models)
+            model_report:dict = evaluate_model(X_train, y_train, X_test, y_test, models, hyperparams)
             print(model_report)
             print('\n=============================================================\n')
             logging.info(f'Model Report : {model_report}')
@@ -59,6 +63,12 @@ class ModelTrainer:
                 list(model_report.values()).index(best_model_score)
             ]
             
+            # Save the Model Name:
+            config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
+            artifacts_folder = config['artifacts_root']      # = '/artifacts'
+            model_name_path = os.path.join(artifacts_folder, "model_name.yaml")
+            save_yaml(model_name_path, best_model_name)
+
             best_model = models[best_model_name]
 
             print(f'Best Model Found , Model Name : {best_model_name} , R2 Score : {best_model_score}')

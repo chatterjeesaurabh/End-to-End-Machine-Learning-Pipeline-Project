@@ -16,9 +16,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
 
+config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
+
 @dataclass
 class DataTransformationConfig:
-    config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
     artifacts_folder = config['artifacts_root']      # = '/artifacts'
 
     preprocessor_obj_file_path = os.path.join(artifacts_folder, "preprocessor.pkl")

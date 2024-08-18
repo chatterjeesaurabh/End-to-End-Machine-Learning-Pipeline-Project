@@ -12,10 +12,11 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
+config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
+
 @dataclass
 class DataIngestionConfig:
-    config:dict = read_yaml("config.yaml")           # read 'config/yaml' file: stores all default directory informations
-    artifacts_folder = config['artifacts_root']      # = '/artifacts'
+    artifacts_folder:str = config['artifacts_root']      # = '/artifacts'
 
     raw_data_path:str = os.path.join(artifacts_folder, "raw.csv")
     train_data_path:str = os.path.join(artifacts_folder, "train.csv")
@@ -29,8 +30,8 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Data Ingestion started")
         try:
-            data_root = self.ingestion_config.config["data_ingestion"]["data_root"]         # = '/data'
-            data_file = self.ingestion_config.config["data_ingestion"]["data_file"]         # = 'raw.csv'
+            data_root = config["data_ingestion"]["data_root"]         # = '/data'
+            data_file = config["data_ingestion"]["data_file"]         # = 'raw.csv'
 
             # load raw data:
             data = pd.read_csv(os.path.join(data_root, data_file))                          # 'data/raw.csv'
