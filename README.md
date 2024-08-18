@@ -16,7 +16,7 @@ The data has been is taken from [Kaggle](https://www.kaggle.com/competitions/pla
 - Data and pipeline versioning - [**DVC**](https://dvc.org/)
 - Experiment tracking and model management - [**MLflow**](https://mlflow.org)
 - Pipeline Orchestration - [**Apache Airflow**](https://airflow.apache.org/)
-- Web application - [**Flask**](https://flask.palletsprojects.com/en/3.0.x/)
+- Web application - [**Flask**](https://flask.palletsprojects.com/en/3.0.x/) and [**Streamlit**](https://streamlit.io/)
 - Containerization - [**Docker**](https://www.docker.com)
 - CI/CD - [**GitHub Actions**](https://github.com/features/actions)
 - Cloud container - [**Azure Container Registry**](https://azure.microsoft.com/en-in/products/container-registry)
@@ -34,6 +34,12 @@ The exploratory data analysis and modeling is done in the [experiments.ipynb](no
 <div align="center">
   <img src="images/MLflow%20Experiment%20-%20UI%20Screenshot%201.jpg" width="600" /><br>
   <em>Model experiment tracking using MLflow</em>
+</div>
+
+## Web App
+<div align="center">
+  <img src="images/Streamlit_Web_App_Home.jpg" width="600" /><br>
+  <em>Streamlit web app</em>
 </div>
 
 ## Setup
