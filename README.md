@@ -23,7 +23,7 @@ The data has been is taken from [Kaggle](https://www.kaggle.com/competitions/pla
 
 ## Architecture
 <div align="center">
-  <img src="images/ML_Pipeline_Flowchart-2-signed.png" width="600" /><br>
+  <img src="images/ML_Pipeline_Flowchart-2-signed.png" width="850" /><br>
   <em>Pipeline architecture</em>
 </div>
 
