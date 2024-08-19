@@ -1,6 +1,6 @@
 # End-to-End Machine Learning Pipeline Project
 
-An *end-to-end* machine learning project on *Gemstone Price Prediction* with **MLflow**, **DVC**, **Airflow**, **Docker**, **Flask** and **Azure ACR**.
+An *end-to-end* machine learning project on *Diamond Price Prediction* with **MLflow**, **DVC**, **Airflow**, **Docker**, **Flask** and **Azure ACR**.
 
 ## Problem Statement
 You are hired by Gem Stones Co. Ltd, a cubic zirconia manufacturer, to predict the prices of stones based on a dataset of 27,000 samples. The company aims to identify higher and lower profitable stones to optimize its profit share. Your task is to develop a model that predicts stone prices and determine the top 5 most important attributes for accurate predictions.
@@ -93,6 +93,15 @@ airflow user create -e <email> -f <first_name> -l <last_name> -p <password> -u <
 nohup airflow scheduler & airflow webserver
 ```
 
+### Run Flask and Streamlit app
+- Flask app
+```bash
+python app.py
+```
+- Streamlit app
+```bash
+streamlit run streamlit_app.py
+```
 
 ## Contributions
 [Saurabh Chatterjee](https://github.com/chatterjeesaurabh) </br>
