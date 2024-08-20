@@ -1,4 +1,4 @@
-# End-to-End Machine Learning Pipeline Project
+# End-to-End Machine Learning Prediction Pipeline
 
 An *end-to-end* machine learning project on *Diamond Price Prediction* with **MLflow**, **DVC**, **Airflow**, **Docker**, **Flask** and **Azure ACR**.
 
